@@ -1,7 +1,7 @@
 {
   "name": "asdq-chart",
   "productName": "ASDQ Chart",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "ASDQ Chart - Electron application",
   "main": "main.js",
   "scripts": {

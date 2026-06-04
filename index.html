@@ -188,12 +188,17 @@
       const scores = computeScores();
       const allSelects = document.querySelectorAll(".questions select");
       let sum = 0, count = 0;
-      allSelects.forEach((sel) => {
-        const val = parseInt(sel.value, 10);
-        if (val > 0) { sum += val; count++; }
+      const questions = [];
+      document.querySelectorAll(".questions").forEach((section) => {
+        const domain = section.dataset.domain;
+        section.querySelectorAll("select").forEach((sel) => {
+          const val = parseInt(sel.value, 10);
+          questions.push({ domain, value: val });
+          if (val > 0) { sum += val; count++; }
+        });
       });
       const overall = count > 0 ? sum / count : 0;
-      ipcRenderer.invoke("show-radar", scores, document.getElementById("name").value, overall);
+      ipcRenderer.invoke("show-radar", scores, document.getElementById("name").value, overall, questions);
     });
   </script>
 </body>

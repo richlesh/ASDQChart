@@ -1,6 +1,6 @@
-# ASDQ Chart v1.0.0
+# ASDQ Chart v1.1.0
 
-A bare-bones Electron application with settings, license key, splash screen, and about window built in.
+An Autism Spectrum Disorder Questionnaire (ASDQ) chart generator for Linux, macOS and Windows.
 
 *by Richard Lesh*
 
@@ -8,6 +8,11 @@ A bare-bones Electron application with settings, license key, splash screen, and
 
 ## Features
 
+- Facilitates the generation of ASDQ charts.
+- Customizable chart appearance.
+- Bar chart and radar chart options.
+- Export to PDF or PNG.
+- Suports all 39 ASEQ questions.
 - Settings window (save/load to `~/.asdq-chart-settings.json`)
 - License key validation (HMAC-SHA256 based)
 - Splash screen with donation link
@@ -62,16 +67,19 @@ Output files are placed in the `dist/` folder.
 ```
 ASDQ Chart/
 ├── main.js              # Electron main process
-├── index.html           # Main window
+├── index.html           # Main window (ASDQ questionnaire form)
 ├── styles.css           # Main window styles
+├── chart.html           # Bar graph window
+├── radar.html           # Radar chart window
 ├── settings.html        # Settings window
 ├── settings.js          # Settings module (load/save)
 ├── about.html           # About dialog
-├── license_dialog.html         # License key entry
+├── license_dialog.html  # License key entry
 ├── splash.html          # Splash screen
 ├── config.json          # App configuration
 ├── package.json         # npm/electron-builder config
 ├── app_icon.png/.icns/.ico  # App icons
+├── doc_icon.png/.icns/.ico  # Document icons (.asdq files)
 ├── generate_license_key.py  # License key generator
 ├── sign-mac.sh          # macOS code signing script
 └── .github/workflows/   # CI/CD workflows

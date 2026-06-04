@@ -311,7 +311,7 @@ ipcMain.handle("show-chart", (_e, scores, name, overall) => {
   });
 });
 
-ipcMain.handle("show-radar", (_e, scores, name, overall) => {
+ipcMain.handle("show-radar", (_e, scores, name, overall, questions) => {
   const radarWin = new BrowserWindow({
     width: 650,
     height: 700,
@@ -320,7 +320,7 @@ ipcMain.handle("show-radar", (_e, scores, name, overall) => {
   });
   radarWin.loadFile("radar.html");
   radarWin.webContents.once("did-finish-load", () => {
-    radarWin.webContents.send("radar-data", { scores, name, overall });
+    radarWin.webContents.send("radar-data", { scores, name, overall, questions });
   });
 });
 
