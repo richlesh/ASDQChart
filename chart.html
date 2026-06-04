@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ASDQ Chart</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: #e0e0e0;
+      padding: 24px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    h1 { font-size: 18px; text-align: center; margin-bottom: 16px; }
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+    .toolbar button {
+      padding: 6px 16px;
+      background: #0a84ff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .toolbar button:hover { background: #0070d8; }
+    .chart-area {
+      flex: 1;
+      display: flex;
+      gap: 0;
+      min-height: 0;
+    }
+    .y-axis {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: space-between;
+      padding-right: 8px;
+      width: 130px;
+      padding-bottom: 40px;
+    }
+    .y-tick {
+      font-size: 11px;
+      color: #aaa;
+      text-align: right;
+      height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .chart {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      border-left: 2px solid #555;
+      padding-left: 8px;
+      padding-bottom: 40px;
+      position: relative;
+    }
+    .grid-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1px solid #333;
+    }
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1;
+      position: relative;
+    }
+    .bar-value {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .bar {
+      width: 100%;
+      max-width: 50px;
+      border-radius: 4px 4px 0 0;
+      min-height: 2px;
+    }
+    .bar-label {
+      font-size: 9px;
+      text-align: center;
+      line-height: 1.2;
+      color: #e0e0e0;
+      position: absolute;
+      top: 100%;
+      margin-top: 4px;
+      width: 100%;
+      vertical-align: top;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">ASDQ Results</h1>
+  <div class="toolbar" id="toolbar"><button id="save-btn">Save…</button></div>
+  <div class="chart-area">
+    <div class="y-axis">
+      <div class="y-tick">Unknown</div>
+      <div class="y-tick">More Neurotypical</div>
+      <div class="y-tick"></div>
+      <div class="y-tick"></div>
+      <div class="y-tick"></div>
+      <div class="y-tick">More Neurodivergent</div>
+    </div>
+    <div class="chart" id="chart"></div>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require("electron");
+
+    const DOMAIN_COLORS = {
+      "Basic Social Communication": "#e53935",
+      "Affiliation": "#ff9800",
+      "Perspective Taking": "#00bcd4",
+      "Peer Relationships": "#7c4dff",
+      "Repetitive Motor Behaviors": "#76ff03",
+      "Sensory Interests": "#2196f3",
+      "Insistence on Sameness": "#ff9800",
+      "Sensory Sensitivities": "#4caf50",
+      "Restricted Interests": "#9c27b0",
+      "Other": "#9e9e9e",
+    };
+
+    ipcRenderer.on("chart-data", (_e, { scores, name, overall }) => {
+      let title = "ASDQ Results";
+      if (name) title += ` — ${name}`;
+      title += ` (${overall.toFixed(1)})`;
+      document.getElementById("title").textContent = title;
+      const chart = document.getElementById("chart");
+      const chartHeight = chart.clientHeight - 40;
+
+      for (let i = 0; i <= 5; i++) {
+        const line = document.createElement("div");
+        line.className = "grid-line";
+        line.style.bottom = `${40 + (i / 5) * chartHeight}px`;
+        chart.appendChild(line);
+      }
+
+      for (const [domain, score] of Object.entries(scores)) {
+        const barHeight = (score / 5) * chartHeight;
+        const color = DOMAIN_COLORS[domain] || "#888";
+        const group = document.createElement("div");
+        group.className = "bar-group";
+        group.innerHTML = `
+          <span class="bar-value" style="color:${color}">${score.toFixed(1)}</span>
+          <div class="bar" style="height:${barHeight}px;background:${color}"></div>
+          <span class="bar-label">${domain}</span>
+        `;
+        chart.appendChild(group);
+      }
+    });
+
+    document.getElementById("save-btn").addEventListener("click", async () => {
+      const result = await ipcRenderer.invoke("save-chart-dialog");
+      if (!result) return;
+      const { filePath, format } = result;
+      const toolbar = document.getElementById("toolbar");
+      toolbar.style.display = "none";
+      if (format === "svg") {
+        const svg = buildSVG();
+        require("fs").writeFileSync(filePath, svg);
+      } else {
+        // Wait a frame for toolbar to hide before capture
+        await new Promise(r => setTimeout(r, 50));
+        const buf = await ipcRenderer.invoke("capture-chart");
+        require("fs").writeFileSync(filePath, Buffer.from(buf));
+      }
+      toolbar.style.display = "";
+    });
+
+    function buildSVG() {
+      const title = document.getElementById("title").textContent;
+      const chart = document.getElementById("chart");
+      const chartHeight = chart.clientHeight - 40;
+      const groups = chart.querySelectorAll(".bar-group");
+      const domainEntries = [];
+      groups.forEach((g) => {
+        const val = parseFloat(g.querySelector(".bar-value").textContent);
+        const label = g.querySelector(".bar-label").textContent;
+        const color = g.querySelector(".bar-value").style.color;
+        domainEntries.push({ val, label, color });
+      });
+
+      const W = 700, H = 500;
+      const margin = { top: 50, right: 20, bottom: 80, left: 140 };
+      const plotW = W - margin.left - margin.right;
+      const plotH = H - margin.top - margin.bottom;
+      const barGap = 8;
+      const barW = (plotW - barGap * (domainEntries.length - 1)) / domainEntries.length;
+
+      let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="font-family:sans-serif;">`;
+      svg += `<rect width="${W}" height="${H}" fill="#1e1e1e"/>`;
+      // Title
+      svg += `<text x="${W / 2}" y="30" text-anchor="middle" fill="#e0e0e0" font-size="16" font-weight="600">${escXml(title)}</text>`;
+      // Y-axis line
+      svg += `<line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotH}" stroke="#555" stroke-width="2"/>`;
+      // Y-axis ticks and labels
+      const yLabels = ["Unknown", "More Neurotypical", "", "", "", "More Neurodivergent"];
+      for (let i = 0; i <= 5; i++) {
+        const y = margin.top + plotH - (i / 5) * plotH;
+        svg += `<line x1="${margin.left - 4}" y1="${y}" x2="${margin.left}" y2="${y}" stroke="#aaa" stroke-width="1"/>`;
+        svg += `<line x1="${margin.left}" y1="${y}" x2="${W - margin.right}" y2="${y}" stroke="#333" stroke-width="1"/>`;
+        if (yLabels[i]) {
+          svg += `<text x="${margin.left - 8}" y="${y + 4}" text-anchor="end" fill="#aaa" font-size="10">${yLabels[i]}</text>`;
+        }
+      }
+      // Bars
+      domainEntries.forEach((d, i) => {
+        const x = margin.left + i * (barW + barGap);
+        const barH = (d.val / 5) * plotH;
+        const y = margin.top + plotH - barH;
+        svg += `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${d.color}" rx="3"/>`;
+        // Value above bar
+        svg += `<text x="${x + barW / 2}" y="${y - 6}" text-anchor="middle" fill="${d.color}" font-size="11" font-weight="600">${d.val.toFixed(1)}</text>`;
+        // Label below axis
+        const labelLines = wrapText(d.label, 10);
+        labelLines.forEach((line, li) => {
+          svg += `<text x="${x + barW / 2}" y="${margin.top + plotH + 14 + li * 11}" text-anchor="middle" fill="#e0e0e0" font-size="8">${escXml(line)}</text>`;
+        });
+      });
+      svg += `</svg>`;
+      return svg;
+    }
+
+    function escXml(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function wrapText(text, maxChars) {
+      const words = text.split(" ");
+      const lines = [];
+      let cur = "";
+      for (const w of words) {
+        if (cur && (cur + " " + w).length > maxChars) {
+          lines.push(cur);
+          cur = w;
+        } else {
+          cur = cur ? cur + " " + w : w;
+        }
+      }
+      if (cur) lines.push(cur);
+      return lines;
+    }
+  </script>
+</body>
+</html>

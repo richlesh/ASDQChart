@@ -1,0 +1,132 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, sans-serif;
+  background: #1e1e1e;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #444;
+}
+
+.header label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header input[type="text"] {
+  width: 200px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #333;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.header input[type="date"] {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #333;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.header button {
+  margin-left: auto;
+  padding: 6px 16px;
+  background: #0a84ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.header button:hover { background: #0070d8; }
+
+.form-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 32px;
+  font-size: 14px;
+}
+
+h2 {
+  font-size: 1.3em;
+  margin: 20px 0 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #444;
+}
+
+h2:first-child { margin-top: 0; }
+
+.scoring-note {
+  font-size: 0.85em;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.domain-header {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 16px 0 8px;
+  padding-left: 8px;
+  border-left: 4px solid #888;
+}
+
+.domain-bsc   { border-left-color: #e53935; color: #ef5350; }
+.domain-aff   { border-left-color: #ff9800; color: #ffb74d; }
+.domain-pt    { border-left-color: #00bcd4; color: #4dd0e1; }
+.domain-pr    { border-left-color: #7c4dff; color: #b388ff; }
+.domain-rmb   { border-left-color: #76ff03; color: #b2ff59; }
+.domain-si    { border-left-color: #2196f3; color: #64b5f6; }
+.domain-is    { border-left-color: #ff9800; color: #ffb74d; }
+.domain-ss    { border-left-color: #4caf50; color: #81c784; }
+.domain-ri    { border-left-color: #9c27b0; color: #ce93d8; }
+.domain-other { border-left-color: #9e9e9e; color: #bdbdbd; }
+
+.question {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.question:hover { background: #2a2a2a; }
+
+.qnum {
+  min-width: 28px;
+  font-size: 0.9em;
+  color: #888;
+  text-align: right;
+}
+
+.qtext {
+  flex: 1;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+.question select {
+  min-width: 130px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #333;
+  color: #e0e0e0;
+  font-size: 0.9em;
+}

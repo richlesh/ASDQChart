@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ASDQ Chart</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="header">
+    <label>Name: <input type="text" id="name"></label>
+    <label>Date: <input type="date" id="date"></label>
+    <button id="chart-btn">Show Graph</button>
+  </div>
+
+  <div class="form-container">
+    <h2>Social Communication and Interaction</h2>
+    <p class="scoring-note">Very Often (1), Often (2), Sometimes (3), Rarely (4), Never (5)</p>
+
+    <h3 class="domain-header domain-bsc">Basic Social Communication</h3>
+    <div class="questions" data-domain="Basic Social Communication" data-reverse="false">
+      <div class="question"><span class="qnum">1.</span><span class="qtext">Start interactions with others without prompting?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">2.</span><span class="qtext">Make expected eye contact? (not too brief, too intense, or looking past people)</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">3.</span><span class="qtext">Use gestures to communicate? (ex. wave, point, nod, shake head)</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">4.</span><span class="qtext">Communicate clearly so that other people know how they feel?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">5.</span><span class="qtext">Share enjoyment about interests or activities with other people?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">6.</span><span class="qtext">Respond appropriately when others approach them? (ex. nodding, saying something back)</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">7.</span><span class="qtext">Have a back and forth conversation about another person's interests and activities, not just their own?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-aff">Affiliation</h3>
+    <div class="questions" data-domain="Affiliation" data-reverse="false">
+      <div class="question"><span class="qnum">8.</span><span class="qtext">Prefer to be with family or friends rather than alone?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">9.</span><span class="qtext">Try to be physically and emotionally-connected to family and friends?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">10.</span><span class="qtext">Show that relationships are important to them?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-pt">Perspective Taking</h3>
+    <div class="questions" data-domain="Perspective Taking" data-reverse="false">
+      <div class="question"><span class="qnum">11.</span><span class="qtext">Offer comfort to others when they are upset or sick?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">12.</span><span class="qtext">Read social cues? (ex. facial expressions, gestures, body language)</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">13.</span><span class="qtext">Understand that expected behavior varies by social situation? (ex. being quieter in the library than at a party)</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">14.</span><span class="qtext">Seem to understand what others are thinking or feeling?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-pr">Peer Relationships</h3>
+    <div class="questions" data-domain="Peer Relationships" data-reverse="false">
+      <div class="question"><span class="qnum">15.</span><span class="qtext">Engage in back and forth play with same-age peers? (ex. playing tag or cops-and-robbers by exchanging roles and allowing others to win OR in adolescents/adults playing turn-taking games or activities that require reciprocal give-and-take)</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">16.</span><span class="qtext">Seek out playful interactions, playmates, or friendships?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+      <div class="question"><span class="qnum">17.</span><span class="qtext">Engage with two or more close friends?</span><select><option value="0">—</option><option value="1">Very Often</option><option value="2">Often</option><option value="3">Sometimes</option><option value="4">Rarely</option><option value="5">Never</option></select></div>
+    </div>
+
+    <h2>Restricted and Repetitive Behaviors</h2>
+    <p class="scoring-note">Very Often (5), Often (4), Sometimes (3), Rarely (2), Never (1)</p>
+
+    <h3 class="domain-header domain-rmb">Repetitive Motor Behaviors</h3>
+    <div class="questions" data-domain="Repetitive Motor Behaviors" data-reverse="true">
+      <div class="question"><span class="qnum">18.</span><span class="qtext">Flap or move their hands in an unusual way? (ex. claps or flaps their hands or flicks their fingers when they are excited)</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">19.</span><span class="qtext">Repetitively jump, rock their body, spin in circles, or do other whole-body motions?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">20.</span><span class="qtext">Repeat sounds, words, or lines from videos?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">21.</span><span class="qtext">Repetitively play with objects or repeat actions without a purpose? (ex. lining up toys, spinning wheels, opening and closing doors, turning lights on and off, etc.)</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-si">Sensory Interests</h3>
+    <div class="questions" data-domain="Sensory Interests" data-reverse="true">
+      <div class="question"><span class="qnum">22.</span><span class="qtext">Prefer to engage with specific parts of objects rather than the whole object? (ex. parts of a toy, small pieces of a game, or parts of electrical equipment)</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">23.</span><span class="qtext">Appear fascinated by sensory experiences? (ex. staring at lights, fans, running water, symmetrical patterns, street signs, falling or dangling objects, textures, smells, etc.)</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">24.</span><span class="qtext">Become preoccupied with visual patterns or sounds? (ex. fascination with the way something looks or moves, excessive focus on certain sounds or videos)</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-is">Insistence on Sameness</h3>
+    <div class="questions" data-domain="Insistence on Sameness" data-reverse="true">
+      <div class="question"><span class="qnum">25.</span><span class="qtext">Insist on keeping a consistent daily schedule? (ex. gets upset with changes in the routine)</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">26.</span><span class="qtext">Have difficulty transitioning from one activity to another?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">27.</span><span class="qtext">Want to follow strict rules, rituals, or sequences? (ex. taking the same route to a destination, touching things in a certain sequence, eating foods in a certain order, playing games a certain way, or performing activities until they are "just right")</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">28.</span><span class="qtext">Have trouble changing their mind and being flexible?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-ss">Sensory Sensitivities</h3>
+    <div class="questions" data-domain="Sensory Sensitivities" data-reverse="true">
+      <div class="question"><span class="qnum">29.</span><span class="qtext">Appear overly sensitive to loud noises?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">30.</span><span class="qtext">Get upset in crowded or busy places?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">31.</span><span class="qtext">Dislike certain lights, sounds, textures, foods, or smells?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-ri">Restricted Interests</h3>
+    <div class="questions" data-domain="Restricted Interests" data-reverse="true">
+      <div class="question"><span class="qnum">32.</span><span class="qtext">Think or talk about the same topic over and over?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">33.</span><span class="qtext">Seem overly fixated on one interest or activity?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">34.</span><span class="qtext">Spend too much time on a game or subject that is not interesting to others?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">35.</span><span class="qtext">Seem too focused on an interest that is highly specific or narrow in scope?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+    </div>
+
+    <h3 class="domain-header domain-other">Other</h3>
+    <div class="questions" data-domain="Other" data-reverse="true">
+      <div class="question"><span class="qnum">36.</span><span class="qtext">Prefer to make lists, memorize facts, or learn about technical subjects?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">37.</span><span class="qtext">Stand too close or show unexpected body language when interacting with others? (ex. a facial expression that doesn't match what the person is saying or having their body turned away during conversation)</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">38.</span><span class="qtext">Take things too literally? (ex. not understanding when people are sarcastic, joking, or using figures of speech such as "it's raining cats and dogs" OR "a leopard can't change his spots")</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+      <div class="question"><span class="qnum">39.</span><span class="qtext">Speak with an unusual volume, tone, rhythm, or rate of speech?</span><select><option value="0">—</option><option value="5">Very Often</option><option value="4">Often</option><option value="3">Sometimes</option><option value="2">Rarely</option><option value="1">Never</option></select></div>
+    </div>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require("electron");
+    const { load } = require("./settings");
+
+    const FONT_SCALE = { small: "100%", medium: "150%", large: "200%" };
+
+    function applyFontSize() {
+      const { fontSize } = load();
+      document.querySelector(".form-container").style.fontSize = FONT_SCALE[fontSize] || "100%";
+    }
+
+    applyFontSize();
+    ipcRenderer.on("settings-updated", applyFontSize);
+
+    function getFormData() {
+      const answers = [];
+      document.querySelectorAll(".questions select").forEach((sel) => {
+        answers.push(parseInt(sel.value, 10));
+      });
+      return {
+        name: document.getElementById("name").value,
+        date: document.getElementById("date").value,
+        answers,
+      };
+    }
+
+    function setFormData(data) {
+      document.getElementById("name").value = data.name || "";
+      document.getElementById("date").value = data.date || "";
+      const selects = document.querySelectorAll(".questions select");
+      (data.answers || []).forEach((val, i) => {
+        if (selects[i]) selects[i].value = String(val);
+      });
+    }
+
+    function clearForm() {
+      document.getElementById("name").value = "";
+      document.getElementById("date").value = "";
+      document.querySelectorAll(".questions select").forEach((sel) => {
+        sel.value = "";
+      });
+    }
+
+    function computeScores() {
+      const scores = {};
+      document.querySelectorAll(".questions").forEach((section) => {
+        const domain = section.dataset.domain;
+        const selects = section.querySelectorAll("select");
+        let sum = 0, count = 0;
+        selects.forEach((sel) => {
+          const val = parseInt(sel.value, 10);
+          if (val > 0) { sum += val; count++; }
+        });
+        scores[domain] = count > 0 ? sum / count : 0;
+      });
+      return scores;
+    }
+
+    ipcMain_handlers: {
+      ipcRenderer.on("get-form-data", () => {
+        ipcRenderer.send("form-data-response", getFormData());
+      });
+
+      ipcRenderer.on("set-form-data", (_e, data) => {
+        setFormData(data);
+      });
+
+      ipcRenderer.on("clear-form", () => {
+        clearForm();
+      });
+    }
+
+    document.getElementById("chart-btn").addEventListener("click", () => {
+      const scores = computeScores();
+      const allSelects = document.querySelectorAll(".questions select");
+      let sum = 0, count = 0;
+      allSelects.forEach((sel) => {
+        const val = parseInt(sel.value, 10);
+        if (val > 0) { sum += val; count++; }
+      });
+      const overall = count > 0 ? sum / count : 0;
+      ipcRenderer.invoke("show-chart", scores, document.getElementById("name").value, overall);
+    });
+  </script>
+</body>
+</html>
