@@ -45,7 +45,6 @@ body {
 }
 
 .header button {
-  margin-left: auto;
   padding: 6px 16px;
   background: #0a84ff;
   color: #fff;
@@ -54,6 +53,8 @@ body {
   font-size: 14px;
   cursor: pointer;
 }
+
+.header button:first-of-type { margin-left: auto; }
 
 .header button:hover { background: #0070d8; }
 
@@ -88,7 +89,7 @@ h2:first-child { margin-top: 0; }
 }
 
 .domain-bsc   { border-left-color: #e53935; color: #ef5350; }
-.domain-aff   { border-left-color: #ff9800; color: #ffb74d; }
+.domain-aff   { border-left-color: #f9a825; color: #fdd835; }
 .domain-pt    { border-left-color: #00bcd4; color: #4dd0e1; }
 .domain-pr    { border-left-color: #7c4dff; color: #b388ff; }
 .domain-rmb   { border-left-color: #76ff03; color: #b2ff59; }

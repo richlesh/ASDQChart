@@ -29,6 +29,15 @@
       "*.ico",
       "node_modules/**"
     ],
+    "fileAssociations": [
+      {
+        "ext": "asdq",
+        "name": "ASDQ Questionnaire",
+        "description": "ASDQ Chart Questionnaire File",
+        "mimeType": "application/x-asdq",
+        "icon": "doc_icon"
+      }
+    ],
     "mac": {
       "category": "public.app-category.productivity",
       "target": "dmg",

@@ -311,6 +311,19 @@ ipcMain.handle("show-chart", (_e, scores, name, overall) => {
   });
 });
 
+ipcMain.handle("show-radar", (_e, scores, name, overall) => {
+  const radarWin = new BrowserWindow({
+    width: 650,
+    height: 700,
+    icon: appIcon,
+    webPreferences: { nodeIntegration: true, contextIsolation: false },
+  });
+  radarWin.loadFile("radar.html");
+  radarWin.webContents.once("did-finish-load", () => {
+    radarWin.webContents.send("radar-data", { scores, name, overall });
+  });
+});
+
 ipcMain.handle("save-chart-dialog", (event) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   const filePath = dialog.showSaveDialogSync(win, {

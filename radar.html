@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ASDQ Chart</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: #e0e0e0;
+      padding: 16px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 { font-size: 18px; text-align: center; margin-bottom: 8px; }
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .toolbar button {
+      padding: 6px 16px;
+      background: #0a84ff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .toolbar button:hover { background: #0070d8; }
+    svg { flex: 1; max-width: 100%; max-height: 100%; }
+  </style>
+</head>
+<body>
+  <h1 id="title">ASDQ Chart</h1>
+  <div class="toolbar" id="toolbar"><button id="save-btn">Save…</button></div>
+  <svg id="chart" viewBox="0 0 600 600"></svg>
+
+  <script>
+    const { ipcRenderer } = require("electron");
+
+    const DOMAIN_COLORS = {
+      "Basic Social Communication": "#e53935",
+      "Affiliation": "#fdd835",
+      "Perspective Taking": "#00bcd4",
+      "Peer Relationships": "#7c4dff",
+      "Repetitive Motor Behaviors": "#76ff03",
+      "Sensory Interests": "#2196f3",
+      "Insistence on Sameness": "#ff9800",
+      "Sensory Sensitivities": "#4caf50",
+      "Restricted Interests": "#9c27b0",
+      "Other": "#9e9e9e",
+    };
+
+    const DOMAIN_ORDER = [
+      "Basic Social Communication",
+      "Affiliation",
+      "Perspective Taking",
+      "Peer Relationships",
+      "Repetitive Motor Behaviors",
+      "Sensory Interests",
+      "Insistence on Sameness",
+      "Sensory Sensitivities",
+      "Restricted Interests",
+      "Other",
+    ];
+
+    function polarToXY(cx, cy, r, angleDeg) {
+      const rad = (angleDeg - 90) * Math.PI / 180;
+      return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
+    }
+
+    function buildWedgePath(cx, cy, r, startAngle, endAngle) {
+      if (r < 0.5) return "";
+      const [x1, y1] = polarToXY(cx, cy, r, startAngle);
+      const [x2, y2] = polarToXY(cx, cy, r, endAngle);
+      const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+      return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+    }
+
+    ipcRenderer.on("radar-data", (_e, { scores, name, overall }) => {
+      let title = "ASDQ Chart";
+      if (name) title += ` — ${name}`;
+      title += ` (${overall.toFixed(1)})`;
+      document.getElementById("title").textContent = title;
+
+      const svg = document.getElementById("chart");
+      const cx = 300, cy = 300, maxR = 220;
+      const labelR = maxR + 14;
+      const wedgeAngle = 360 / DOMAIN_ORDER.length;
+      let svgContent = "";
+
+      // Concentric ring guides (dashed)
+      for (let i = 1; i <= 5; i++) {
+        const r = (i / 5) * maxR;
+        svgContent += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="4 3"/>`;
+      }
+
+      // Wedges
+      DOMAIN_ORDER.forEach((domain, i) => {
+        const score = scores[domain] || 0;
+        const startAngle = i * wedgeAngle;
+        const endAngle = startAngle + wedgeAngle;
+        const r = (score / 5) * maxR;
+        const color = DOMAIN_COLORS[domain];
+
+        // Full wedge at reduced opacity for background
+        svgContent += `<path d="${buildWedgePath(cx, cy, maxR, startAngle, endAngle)}" fill="${color}" opacity="0.15"/>`;
+        // Scored wedge
+        if (r > 0) {
+          svgContent += `<path d="${buildWedgePath(cx, cy, r, startAngle, endAngle)}" fill="${color}" opacity="0.85"/>`;
+        }
+        // Wedge border lines
+        const [lx, ly] = polarToXY(cx, cy, maxR, startAngle);
+        svgContent += `<line x1="${cx}" y1="${cy}" x2="${lx}" y2="${ly}" stroke="#1e1e1e" stroke-width="1.5"/>`;
+
+        // Label along curved arc outside
+        const midAngle = startAngle + wedgeAngle / 2;
+        const flip = midAngle > 90 && midAngle < 270;
+        const arcR = flip ? labelR + 12 : labelR;
+        // Create an arc path for the text to follow
+        const arcId = `arc-${i}`;
+        let arcPath;
+        if (flip) {
+          // Draw arc from endAngle to startAngle so text reads left-to-right
+          const [ax1, ay1] = polarToXY(cx, cy, arcR, endAngle - 2);
+          const [ax2, ay2] = polarToXY(cx, cy, arcR, startAngle + 2);
+          arcPath = `M ${ax1} ${ay1} A ${arcR} ${arcR} 0 0 0 ${ax2} ${ay2}`;
+        } else {
+          const [ax1, ay1] = polarToXY(cx, cy, arcR, startAngle + 2);
+          const [ax2, ay2] = polarToXY(cx, cy, arcR, endAngle - 2);
+          arcPath = `M ${ax1} ${ay1} A ${arcR} ${arcR} 0 0 1 ${ax2} ${ay2}`;
+        }
+        svgContent += `<defs><path id="${arcId}" d="${arcPath}"/></defs>`;
+        if (domain === "Basic Social Communication") {
+          const arcR2 = arcR + 13;
+          const arcId2 = `arc-${i}-b`;
+          let arcPath2;
+          if (flip) {
+            const [bx1, by1] = polarToXY(cx, cy, arcR2, endAngle - 2);
+            const [bx2, by2] = polarToXY(cx, cy, arcR2, startAngle + 2);
+            arcPath2 = `M ${bx1} ${by1} A ${arcR2} ${arcR2} 0 0 0 ${bx2} ${by2}`;
+          } else {
+            const [bx1, by1] = polarToXY(cx, cy, arcR2, startAngle + 2);
+            const [bx2, by2] = polarToXY(cx, cy, arcR2, endAngle - 2);
+            arcPath2 = `M ${bx1} ${by1} A ${arcR2} ${arcR2} 0 0 1 ${bx2} ${by2}`;
+          }
+          svgContent += `<defs><path id="${arcId2}" d="${arcPath2}"/></defs>`;
+          svgContent += `<text fill="#e0e0e0" font-size="11" font-weight="600"><textPath href="#${arcId}" startOffset="50%" text-anchor="middle">Communication</textPath></text>`;
+          svgContent += `<text fill="#e0e0e0" font-size="11" font-weight="600"><textPath href="#${arcId2}" startOffset="50%" text-anchor="middle">Basic Social</textPath></text>`;
+        } else {
+          svgContent += `<text fill="#e0e0e0" font-size="11" font-weight="600"><textPath href="#${arcId}" startOffset="50%" text-anchor="middle">${domain}</textPath></text>`;
+        }
+      });
+
+      // Last border line to close
+      const [lx, ly] = polarToXY(cx, cy, maxR, 0);
+      svgContent += `<line x1="${cx}" y1="${cy}" x2="${lx}" y2="${ly}" stroke="#1e1e1e" stroke-width="1.5"/>`;
+
+      svg.innerHTML = svgContent;
+    });
+
+    document.getElementById("save-btn").addEventListener("click", async () => {
+      const result = await ipcRenderer.invoke("save-chart-dialog");
+      if (!result) return;
+      const { filePath, format } = result;
+      const toolbar = document.getElementById("toolbar");
+      toolbar.style.display = "none";
+      if (format === "svg") {
+        const svgEl = document.getElementById("chart");
+        const svgData = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" style="background:#1e1e1e;font-family:sans-serif;">${svgEl.innerHTML}</svg>`;
+        require("fs").writeFileSync(filePath, svgData);
+      } else {
+        await new Promise(r => setTimeout(r, 50));
+        const buf = await ipcRenderer.invoke("capture-chart");
+        require("fs").writeFileSync(filePath, Buffer.from(buf));
+      }
+      toolbar.style.display = "";
+    });
+  </script>
+</body>
+</html>

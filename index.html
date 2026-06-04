@@ -9,7 +9,8 @@
   <div class="header">
     <label>Name: <input type="text" id="name"></label>
     <label>Date: <input type="date" id="date"></label>
-    <button id="chart-btn">Show Graph</button>
+    <button id="chart-btn">Bar Graph</button>
+    <button id="radar-btn">Radar Chart</button>
   </div>
 
   <div class="form-container">
@@ -181,6 +182,18 @@
       });
       const overall = count > 0 ? sum / count : 0;
       ipcRenderer.invoke("show-chart", scores, document.getElementById("name").value, overall);
+    });
+
+    document.getElementById("radar-btn").addEventListener("click", () => {
+      const scores = computeScores();
+      const allSelects = document.querySelectorAll(".questions select");
+      let sum = 0, count = 0;
+      allSelects.forEach((sel) => {
+        const val = parseInt(sel.value, 10);
+        if (val > 0) { sum += val; count++; }
+      });
+      const overall = count > 0 ? sum / count : 0;
+      ipcRenderer.invoke("show-radar", scores, document.getElementById("name").value, overall);
     });
   </script>
 </body>
