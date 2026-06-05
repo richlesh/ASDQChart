@@ -1,6 +1,6 @@
 # ASDQ Chart v1.1.0
 
-An Autism Spectrum Disorder Questionnaire (ASDQ) chart generator for Linux, macOS and Windows.
+An Autism Spectrum Dimensions Questionnaire (ASDQ) chart generator for Linux, macOS and Windows.
 
 *by Richard Lesh*
 
