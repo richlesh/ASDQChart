@@ -12,7 +12,7 @@ An Autism Spectrum Dimensions Questionnaire (ASDQ) chart generator for Linux, ma
 - Customizable chart appearance.
 - Bar chart and radar chart options.
 - Export to PDF or PNG.
-- Suports all 39 ASEQ questions.
+- Suports all 39 ASDQ questions.
 - Settings window (save/load to `~/.asdq-chart-settings.json`)
 - License key validation (HMAC-SHA256 based)
 - Splash screen with donation link
