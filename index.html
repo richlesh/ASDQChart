@@ -114,6 +114,25 @@
     applyFontSize();
     ipcRenderer.on("settings-updated", applyFontSize);
 
+    let savedSnapshot = null;
+
+    function getSnapshot() {
+      return JSON.stringify(getFormData());
+    }
+
+    function markClean() {
+      savedSnapshot = getSnapshot();
+    }
+
+    function isDirty() {
+      return getSnapshot() !== savedSnapshot;
+    }
+
+    // Set initial clean state after DOM is ready
+    setTimeout(markClean, 0);
+
+    ipcRenderer.on("mark-clean", markClean);
+
     function getFormData() {
       const answers = [];
       document.querySelectorAll(".questions select").forEach((sel) => {
@@ -165,10 +184,12 @@
 
       ipcRenderer.on("set-form-data", (_e, data) => {
         setFormData(data);
+        markClean();
       });
 
       ipcRenderer.on("clear-form", () => {
         clearForm();
+        markClean();
       });
     }
 

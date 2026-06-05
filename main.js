@@ -55,6 +55,46 @@ function createWindow() {
     mainWin = win;
     buildMenu();
   }
+
+  let closeConfirmed = false;
+  win.on("close", async (e) => {
+    if (closeConfirmed) return;
+    e.preventDefault();
+    const dirty = await win.webContents.executeJavaScript("isDirty()");
+    if (!dirty) {
+      closeConfirmed = true;
+      win.close();
+      return;
+    }
+    const { response } = await dialog.showMessageBox(win, {
+      type: "question",
+      buttons: ["Save", "Don\u2019t Save", "Cancel"],
+      defaultId: 0,
+      cancelId: 2,
+      message: "Do you want to save changes before closing?",
+    });
+    if (response === 0) {
+      const filePath = windowFilePaths.get(win.id);
+      if (filePath) {
+        const data = await win.webContents.executeJavaScript("getFormData()");
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+      } else {
+        const chosen = dialog.showSaveDialogSync(win, {
+          filters: [{ name: "ASDQ Files", extensions: ["asdq"] }],
+        });
+        if (!chosen) return;
+        const data = await win.webContents.executeJavaScript("getFormData()");
+        fs.writeFileSync(chosen, JSON.stringify(data, null, 2));
+        windowFilePaths.set(win.id, chosen);
+      }
+      closeConfirmed = true;
+      win.close();
+    } else if (response === 1) {
+      closeConfirmed = true;
+      win.close();
+    }
+  });
+
   return win;
 }
 
@@ -145,6 +185,7 @@ function saveToFile(win, filePath) {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
     windowFilePaths.set(win.id, filePath);
     win.setTitle(`ASDQ Chart — ${path.basename(filePath)}`);
+    win.webContents.send("mark-clean");
   });
 }
 

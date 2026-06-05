@@ -248,7 +248,9 @@
       toolbar.style.display = "none";
       if (format === "svg") {
         const svgEl = document.getElementById("chart");
-        const svgData = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" style="background:#1e1e1e;font-family:sans-serif;">${svgEl.innerHTML}</svg>`;
+        const titleText = document.getElementById("title").textContent;
+        const titleSvg = `<text x="300" y="20" text-anchor="middle" fill="#e0e0e0" font-size="18" font-weight="bold" font-family="sans-serif">${titleText}</text>`;
+        const svgData = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -30 600 630" width="600" height="630" style="background:#1e1e1e;font-family:sans-serif;">${titleSvg}${svgEl.innerHTML}</svg>`;
         require("fs").writeFileSync(filePath, svgData);
       } else {
         await new Promise(r => setTimeout(r, 50));
